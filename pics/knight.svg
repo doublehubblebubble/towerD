@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" width="120" height="160">
+  <!-- Shadow -->
+  <ellipse cx="60" cy="152" rx="40" ry="7" fill="#000" opacity="0.2"/>
+
+  <!-- === LEGS / GREAVES === -->
+  <!-- Left leg -->
+  <rect x="36" y="108" width="20" height="28" rx="7" fill="#4a4a6a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Right leg -->
+  <rect x="64" y="108" width="20" height="28" rx="7" fill="#4a4a6a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Sabatons -->
+  <ellipse cx="46" cy="136" rx="14" ry="7" fill="#2a2a3a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <ellipse cx="74" cy="136" rx="14" ry="7" fill="#2a2a3a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Sabaton highlight -->
+  <ellipse cx="42" cy="133" rx="6" ry="3" fill="#6a6a8a" opacity="0.5"/>
+  <ellipse cx="70" cy="133" rx="6" ry="3" fill="#6a6a8a" opacity="0.5"/>
+  <!-- Knee cops (round kneecaps) -->
+  <circle cx="46" cy="112" r="10" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <circle cx="74" cy="112" r="10" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <circle cx="46" cy="112" r="5" fill="#7070a0"/>
+  <circle cx="74" cy="112" r="5" fill="#7070a0"/>
+
+  <!-- === BODY PLATE === -->
+  <!-- Tassets (hip plates) -->
+  <rect x="32" y="106" width="20" height="16" rx="5" fill="#4a4a6a" stroke="#1a1a2a" stroke-width="2"/>
+  <rect x="68" y="106" width="20" height="16" rx="5" fill="#4a4a6a" stroke="#1a1a2a" stroke-width="2"/>
+  <!-- Main body plate -->
+  <rect x="28" y="72" width="64" height="44" rx="12" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="3"/>
+  <!-- Breastplate -->
+  <rect x="34" y="76" width="52" height="32" rx="8" fill="#6a6a90" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Breast ridge -->
+  <line x1="60" y1="76" x2="60" y2="108" stroke="#8a8ab0" stroke-width="3" stroke-linecap="round"/>
+  <!-- Plate bands -->
+  <line x1="34" y1="88" x2="86" y2="88" stroke="#8a8ab0" stroke-width="1.5"/>
+  <line x1="34" y1="99" x2="86" y2="99" stroke="#8a8ab0" stroke-width="1.5"/>
+  <!-- Chest highlight (shine) -->
+  <ellipse cx="50" cy="80" rx="12" ry="7" fill="#aaaacc" opacity="0.4"/>
+  <!-- Gold trim on body -->
+  <rect x="28" y="108" width="64" height="8" rx="4" fill="#c0a020" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Pauldrons (big round shoulder guards) -->
+  <circle cx="30" cy="78" r="16" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="3"/>
+  <circle cx="30" cy="78" r="10" fill="#6a6a90"/>
+  <circle cx="30" cy="78" r="5" fill="#8a8ab0"/>
+  <circle cx="90" cy="78" r="16" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="3"/>
+  <circle cx="90" cy="78" r="10" fill="#6a6a90"/>
+  <circle cx="90" cy="78" r="5" fill="#8a8ab0"/>
+
+  <!-- === LEFT ARM + SHIELD === -->
+  <rect x="6" y="80" width="26" height="14" rx="7" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="2.5"/>
+
+  <!-- Shield (large, kite shaped) -->
+  <path d="M2 62 L2 108 Q2 126 14 130 Q26 134 26 120 L26 62 Q14 54 2 62 Z" fill="#1a3080" stroke="#1a1a2a" stroke-width="3"/>
+  <path d="M4 64 L4 106 Q4 120 14 124 Q24 120 24 106 L24 64 Q14 58 4 64 Z" fill="#2a4aaa"/>
+  <!-- Shield gold cross -->
+  <rect x="12" y="66" width="4" height="50" rx="2" fill="#c0a020" stroke="#806010" stroke-width="1"/>
+  <rect x="6" y="86" width="16" height="4" rx="2" fill="#c0a020" stroke="#806010" stroke-width="1"/>
+  <!-- Shield boss (center stud) -->
+  <circle cx="14" cy="88" r="7" fill="#c0a020" stroke="#806010" stroke-width="2"/>
+  <circle cx="14" cy="88" r="4" fill="#e0c040"/>
+  <circle cx="12" cy="86" r="1.5" fill="white" opacity="0.7"/>
+
+  <!-- === RIGHT ARM + SWORD === -->
+  <rect x="88" y="80" width="26" height="14" rx="7" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Gauntlet -->
+  <rect x="106" y="80" width="14" height="14" rx="5" fill="#6a6a90" stroke="#1a1a2a" stroke-width="2"/>
+
+  <!-- Sword (big oversized CoC style) -->
+  <!-- Blade -->
+  <path d="M112 30 L117 30 L120 86 L109 86 Z" fill="#d0d0e0" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Blade fuller (groove) -->
+  <line x1="114.5" y1="33" x2="114.5" y2="84" stroke="#a0a0b0" stroke-width="1.5"/>
+  <!-- Blade highlight -->
+  <path d="M112 32 L114 32 L116 80 L112 80 Z" fill="#f0f0ff" opacity="0.4"/>
+  <!-- Crossguard -->
+  <rect x="104" y="84" width="28" height="8" rx="4" fill="#c0a020" stroke="#1a1a1a" stroke-width="2.5"/>
+  <circle cx="104" cy="88" r="5" fill="#e0c040" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="132" cy="88" r="5" fill="#e0c040" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Grip -->
+  <rect x="110" y="92" width="8" height="22" rx="3" fill="#5a3010" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Grip wrap -->
+  <line x1="109" y1="96" x2="119" y2="96" stroke="#3a2008" stroke-width="1.5"/>
+  <line x1="109" y1="100" x2="119" y2="100" stroke="#3a2008" stroke-width="1.5"/>
+  <line x1="109" y1="104" x2="119" y2="104" stroke="#3a2008" stroke-width="1.5"/>
+  <line x1="109" y1="108" x2="119" y2="108" stroke="#3a2008" stroke-width="1.5"/>
+  <!-- Pommel -->
+  <circle cx="114" cy="116" r="8" fill="#c0a020" stroke="#1a1a1a" stroke-width="2.5"/>
+  <circle cx="114" cy="116" r="4.5" fill="#e0c040"/>
+  <circle cx="112" cy="114" r="1.5" fill="white" opacity="0.7"/>
+
+  <!-- === NECK === -->
+  <rect x="52" y="64" width="16" height="14" rx="6" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="2.5"/>
+
+  <!-- === HEAD === -->
+  <ellipse cx="60" cy="46" rx="30" ry="28" fill="#f5c488" stroke="#1a1a1a" stroke-width="3"/>
+
+  <!-- === HELMET (full visored) === -->
+  <path d="M30 46 Q30 14 60 10 Q90 14 90 46 Q82 34 60 32 Q38 34 30 46 Z" fill="#5a5a7a" stroke="#1a1a2a" stroke-width="3"/>
+  <!-- Helmet brim -->
+  <rect x="28" y="43" width="64" height="10" rx="5" fill="#4a4a6a" stroke="#1a1a2a" stroke-width="2.5"/>
+  <!-- Visor opening (T-shaped) -->
+  <rect x="44" y="42" width="32" height="14" rx="4" fill="#1a1a2a"/>
+  <rect x="56" y="38" width="8" height="20" rx="3" fill="#1a1a2a"/>
+  <!-- Eyes glow through visor -->
+  <ellipse cx="50" cy="48" rx="5" ry="3.5" fill="#4080ff" opacity="0.9"/>
+  <ellipse cx="70" cy="48" rx="5" ry="3.5" fill="#4080ff" opacity="0.9"/>
+  <ellipse cx="50" cy="48" rx="3" ry="2" fill="#80b0ff"/>
+  <ellipse cx="70" cy="48" rx="3" ry="2" fill="#80b0ff"/>
+  <!-- Helmet crest -->
+  <rect x="55" y="10" width="10" height="24" rx="5" fill="#c0a020" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Plume -->
+  <path d="M55 18 Q46 4 48 -4 Q52 -8 54 -2 Q56 -10 60 -6 Q64 -10 66 -2 Q68 -8 72 -4 Q74 4 65 18" fill="#cc2020" stroke="#1a1a1a" stroke-width="2"/>
+  <!-- Helmet gold trim -->
+  <path d="M30 46 Q30 14 60 10 Q90 14 90 46" stroke="#c0a020" stroke-width="2" fill="none" opacity="0.7"/>
+  <!-- Helmet shine -->
+  <ellipse cx="46" cy="18" rx="10" ry="6" fill="#8a8ab0" opacity="0.4"/>
+
+  <!-- === NAME LABEL === -->
+  <rect x="18" y="145" width="84" height="18" rx="6" fill="#1a1a2a" stroke="#6a6a9a" stroke-width="2"/>
+  <text x="60" y="158" text-anchor="middle" font-family="Arial Black, sans-serif" font-size="11" font-weight="900" fill="#a0a0e0" letter-spacing="2">KNIGHT</text>
+</svg>

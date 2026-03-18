@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tower Defense — Soldier Roster</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(ellipse at top, #1a0e06 0%, #0d0800 100%);
+      min-height: 100vh;
+      font-family: 'Cinzel', Georgia, serif;
+      padding: 40px 20px;
+    }
+
+    /* Title */
+    h1 {
+      text-align: center;
+      font-size: 2.4rem;
+      color: #f0c030;
+      text-shadow: 0 0 20px #c08010, 0 3px 6px #000;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #a08040;
+      font-size: 0.85rem;
+      letter-spacing: 3px;
+      margin-bottom: 40px;
+    }
+
+    /* Grid */
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Card */
+    .card {
+      background: linear-gradient(160deg, #1e1208 0%, #120c04 100%);
+      border: 3px solid #5a3a10;
+      border-radius: 16px;
+      padding: 20px 16px 16px;
+      width: 200px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,200,80,0.08);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(160deg, rgba(255,200,80,0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: #c8a020;
+      box-shadow: 0 14px 36px rgba(0,0,0,0.7), 0 0 20px rgba(200,160,30,0.3);
+    }
+
+    /* Illustration container */
+    .img-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 140px;
+      margin-bottom: 12px;
+    }
+
+    /* Name */
+    .card h2 {
+      text-align: center;
+      font-size: 0.9rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .archer h2    { color: #80e030; text-shadow: 0 0 10px #40a000; }
+    .crossbow h2  { color: #60b8f0; text-shadow: 0 0 10px #2070c0; }
+    .mage h2      { color: #d070ff; text-shadow: 0 0 10px #8020c0; }
+    .knight h2    { color: #a0a8e0; text-shadow: 0 0 10px #4050c0; }
+    .catapult h2  { color: #f0a830; text-shadow: 0 0 10px #c06010; }
+
+    /* Stats table */
+    table { width: 100%; border-collapse: collapse; font-size: 0.72rem; font-family: Georgia, serif; }
+    td { padding: 3px 4px; color: #a09060; }
+    td:first-child { color: #605030; width: 44%; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Stat bar */
+    .bar-wrap { background: #0a0600; border-radius: 4px; height: 7px; overflow: hidden; border: 1px solid #2a1a06; }
+    .bar { height: 7px; border-radius: 4px; transition: width 0.3s; }
+    .archer  .bar { background: linear-gradient(90deg, #40a000, #80e030); }
+    .crossbow .bar { background: linear-gradient(90deg, #1a60b0, #40a0f0); }
+    .mage    .bar { background: linear-gradient(90deg, #6010b0, #c040f0); }
+    .knight  .bar { background: linear-gradient(90deg, #303080, #6070c0); }
+    .catapult .bar { background: linear-gradient(90deg, #804010, #e09030); }
+
+    td.aoe-cell { color: #f0c030; font-size: 0.72rem; }
+
+    /* Ability row */
+    .ability { color: #d0a820 !important; font-style: italic; }
+
+    /* Cost */
+    .cost {
+      text-align: center;
+      margin-top: 12px;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.72rem;
+      color: #807040;
+      font-family: Georgia, serif;
+    }
+    .cost span { color: #f0c030; font-weight: bold; font-size: 0.82rem; }
+
+    /* Role badge */
+    .role {
+      display: inline-block;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,200,80,0.2);
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 0.65rem;
+      color: #c0a040;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>⚔ Soldier Roster</h1>
+  <p class="subtitle">Choose your defenders</p>
+
+  <div class="grid">
+
+    <!-- ARCHER -->
+    <div class="card archer">
+      <div class="img-wrap">
+        <img src="archer.svg" width="100" height="133" alt="Archer"/>
+      </div>
+      <h2>Archer</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role">Ranged DPS</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:45%"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:80%"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:60%"></div></div></td></tr>
+        <tr><td>AOE</td><td>—</td></tr>
+        <tr><td>Lv3 Skill</td><td class="ability">Twin shot</td></tr>
+      </table>
+      <div class="cost">Place <span>50</span>🪙 &nbsp;·&nbsp; Max <span>200</span>🪙</div>
+    </div>
+
+    <!-- CROSSBOWMAN -->
+    <div class="card crossbow">
+      <div class="img-wrap">
+        <img src="crossbowman.svg" width="100" height="133" alt="Crossbowman"/>
+      </div>
+      <h2>Crossbowman</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role">Sniper</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:75%"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:28%"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:92%"></div></div></td></tr>
+        <tr><td>AOE</td><td>—</td></tr>
+        <tr><td>Lv3 Skill</td><td class="ability">Piercing bolt</td></tr>
+      </table>
+      <div class="cost">Place <span>80</span>🪙 &nbsp;·&nbsp; Max <span>250</span>🪙</div>
+    </div>
+
+    <!-- MAGE -->
+    <div class="card mage">
+      <div class="img-wrap">
+        <img src="mage.svg" width="100" height="133" alt="Mage"/>
+      </div>
+      <h2>Mage</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role">AOE Nuker</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:85%"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:38%"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:42%"></div></div></td></tr>
+        <tr><td>AOE</td><td class="aoe-cell">★ Splash</td></tr>
+        <tr><td>Lv3 Skill</td><td class="ability">Chain lightning</td></tr>
+      </table>
+      <div class="cost">Place <span>120</span>🪙 &nbsp;·&nbsp; Max <span>350</span>🪙</div>
+    </div>
+
+    <!-- KNIGHT -->
+    <div class="card knight">
+      <div class="img-wrap">
+        <img src="knight.svg" width="100" height="133" alt="Knight"/>
+      </div>
+      <h2>Knight</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role">Melee Tank</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:60%"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:48%"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:18%"></div></div></td></tr>
+        <tr><td>AOE</td><td>—</td></tr>
+        <tr><td>Lv3 Skill</td><td class="ability">Slow on hit</td></tr>
+      </table>
+      <div class="cost">Place <span>100</span>🪙 &nbsp;·&nbsp; Max <span>300</span>🪙</div>
+    </div>
+
+    <!-- KING -->
+    <div class="card king" style="border-color:#c8a020; background: linear-gradient(160deg, #1e1608 0%, #100c02 100%);">
+      <div class="img-wrap">
+        <img src="king.svg" width="120" height="150" alt="King"/>
+      </div>
+      <h2 style="color:#f0c030; text-shadow: 0 0 12px #c08010;">King</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role" style="border-color:rgba(240,192,48,0.4);color:#f0c030;">Hero / Leader</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:90%;background:linear-gradient(90deg,#a07010,#f0c030)"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:62%;background:linear-gradient(90deg,#a07010,#f0c030)"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:35%;background:linear-gradient(90deg,#a07010,#f0c030)"></div></div></td></tr>
+        <tr><td>AOE</td><td style="color:#f0c030;">★★ Shockwave</td></tr>
+        <tr><td>Lv3 Skill</td><td style="color:#f0c030;font-style:italic;">Royal Rage</td></tr>
+      </table>
+      <div class="cost" style="color:#a08030;">Unique — <span style="color:#f0c030;">Unlocked from start</span></div>
+    </div>
+
+    <!-- CATAPULT -->
+    <div class="card catapult">
+      <div class="img-wrap">
+        <img src="catapult.svg" width="140" height="123" alt="Catapult"/>
+      </div>
+      <h2>Catapult</h2>
+      <table>
+        <tr><td>Role</td><td><span class="role">Siege</span></td></tr>
+        <tr><td>Damage</td><td><div class="bar-wrap"><div class="bar" style="width:100%"></div></div></td></tr>
+        <tr><td>Speed</td><td><div class="bar-wrap"><div class="bar" style="width:12%"></div></div></td></tr>
+        <tr><td>Range</td><td><div class="bar-wrap"><div class="bar" style="width:96%"></div></div></td></tr>
+        <tr><td>AOE</td><td class="aoe-cell">★★ Massive</td></tr>
+        <tr><td>Lv3 Skill</td><td class="ability">Flaming boulder</td></tr>
+      </table>
+      <div class="cost">Place <span>200</span>🪙 &nbsp;·&nbsp; Max <span>500</span>🪙</div>
+    </div>
+
+  </div>
+</body>
+</html>

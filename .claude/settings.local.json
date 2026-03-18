@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open:*)",
+      "WebFetch(domain:character-catalogue.fandom.com)",
+      "WebSearch",
+      "WebFetch(domain:clashofclans.fandom.com)",
+      "WebFetch(domain:static.wikia.nocookie.net)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

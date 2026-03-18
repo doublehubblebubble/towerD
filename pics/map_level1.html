@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Level 1 — Map Design</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Arial Black', Arial, sans-serif;
+    color: #eee;
+    padding: 16px;
+  }
+
+  /* ── Outer game frame ── */
+  #game-frame {
+    border: 3px solid #c8a020;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(200,160,30,0.3), 0 0 80px rgba(0,0,0,0.8);
+    width: 840px;
+  }
+
+  /* ── Map area ── */
+  #map-area {
+    position: relative;
+    width: 840px;
+    height: 520px;
+    background: #2e5220;
+  }
+  #map { display: block; }
+
+  /* ── HUD panel ── */
+  #hud {
+    background: linear-gradient(180deg, #1a1208 0%, #0e0c06 100%);
+    border-top: 3px solid #c8a020;
+    width: 840px;
+    padding: 12px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Top row: wave / castle HP / coins */
+  .hud-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hud-block {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .hud-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #806030;
+  }
+  .hud-value {
+    font-size: 16px;
+    font-weight: 900;
+    color: #f0c030;
+    text-shadow: 0 0 8px rgba(240,192,48,0.4);
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(180deg, transparent, #5a4010, transparent);
+  }
+
+  /* Castle HP bar */
+  .hp-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .hp-bar-bg {
+    height: 14px;
+    background: #1a0a00;
+    border-radius: 7px;
+    border: 1.5px solid #5a3a10;
+    overflow: hidden;
+  }
+  .hp-bar-fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 7px;
+    background: linear-gradient(90deg, #00aa44, #44ee88);
+    position: relative;
+  }
+  .hp-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 6px; right: 6px;
+    height: 4px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 2px;
+  }
+  .hp-text {
+    font-size: 10px;
+    color: #80e090;
+    letter-spacing: 1px;
+    text-align: right;
+  }
+
+  /* Wave progress bar */
+  .wave-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 120px;
+  }
+  .wave-bar-bg {
+    height: 14px;
+    background: #1a0a00;
+    border-radius: 7px;
+    border: 1.5px solid #5a3a10;
+    overflow: hidden;
+  }
+  .wave-bar-fill {
+    height: 100%;
+    width: 5%;  /* wave 1 of 20 */
+    border-radius: 7px;
+    background: linear-gradient(90deg, #cc4400, #ff8800);
+  }
+
+  /* Start wave button */
+  #start-btn {
+    padding: 8px 22px;
+    background: linear-gradient(180deg, #e8a020 0%, #b07010 100%);
+    border: 2px solid #f0c030;
+    border-radius: 8px;
+    color: #1a0a00;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    box-shadow: 0 3px 10px rgba(200,160,30,0.4);
+    white-space: nowrap;
+    transition: transform 0.1s;
+  }
+  #start-btn:hover { transform: scale(1.05); }
+  #start-btn:active { transform: scale(0.97); }
+
+  /* ── Soldier tray (bottom row) ── */
+  .hud-bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .tray-label {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #806030;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    height: 80px;
+    display: flex;
+    align-items: center;
+  }
+
+  .soldier-tray {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .soldier-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1e1206;
+    border: 2px solid #5a3a10;
+    border-radius: 8px;
+    padding: 6px 8px 5px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    width: 90px;
+    gap: 4px;
+    position: relative;
+  }
+  .soldier-card:hover {
+    border-color: #c8a020;
+    background: #2a1a08;
+    transform: translateY(-2px);
+  }
+  .soldier-card.selected {
+    border-color: #f0c030;
+    background: #2e1e0a;
+    box-shadow: 0 0 12px rgba(240,192,48,0.35);
+  }
+  .soldier-card.locked {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  .soldier-icon {
+    font-size: 28px;
+    line-height: 1;
+  }
+  .soldier-name {
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #c8a060;
+    text-transform: uppercase;
+    font-weight: 900;
+  }
+  .soldier-cost {
+    font-size: 10px;
+    color: #f0c030;
+    font-weight: 900;
+  }
+  .soldier-level {
+    position: absolute;
+    top: 4px; right: 5px;
+    font-size: 8px;
+    color: #f0c030;
+    background: #2a1a00;
+    border: 1px solid #c8a020;
+    border-radius: 3px;
+    padding: 0 3px;
+    font-weight: 900;
+  }
+  .soldier-lock {
+    font-size: 11px;
+    color: #666;
+  }
+
+  /* Stat mini bars on cards */
+  .mini-bars { width: 100%; display: flex; flex-direction: column; gap: 2px; }
+  .mini-bar-row { display: flex; align-items: center; gap: 3px; }
+  .mini-bar-label { font-size: 7px; color: #705030; width: 12px; }
+  .mini-bar-bg { flex: 1; height: 4px; background: #0e0800; border-radius: 2px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 2px; }
+
+  /* Speed indicator text */
+  .hud-speed {
+    font-size: 9px;
+    color: #806030;
+    letter-spacing: 1px;
+    text-align: right;
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+  }
+  .speed-btn {
+    padding: 4px 10px;
+    background: #1e1206;
+    border: 1.5px solid #5a3a10;
+    border-radius: 5px;
+    color: #c8a060;
+    font-size: 10px;
+    font-weight: 900;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .speed-btn.active { border-color: #f0c030; color: #f0c030; }
+
+</style>
+</head>
+<body>
+
+<div id="game-frame">
+
+  <!-- ── MAP ── -->
+  <div id="map-area">
+    <canvas id="map" width="840" height="520"></canvas>
+  </div>
+
+  <!-- ── HUD PANEL ── -->
+  <div id="hud">
+
+    <!-- Top row: status info + start button -->
+    <div class="hud-top">
+
+      <!-- Wave -->
+      <div class="hud-block">
+        <div class="hud-label">Wave</div>
+        <div class="hud-value">1 / 20</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Wave progress -->
+      <div class="wave-wrap">
+        <div class="hud-label">Progress</div>
+        <div class="wave-bar-bg"><div class="wave-bar-fill"></div></div>
+        <div style="font-size:9px;color:#cc6600;letter-spacing:1px;">Next: Goblins ×8</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Castle HP -->
+      <div class="hp-wrap">
+        <div class="hud-label">🏰 Castle HP</div>
+        <div class="hp-bar-bg"><div class="hp-bar-fill"></div></div>
+        <div class="hp-text">1000 / 1000</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Coins -->
+      <div class="hud-block">
+        <div class="hud-label">🪙 Coins</div>
+        <div class="hud-value">100</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Kills -->
+      <div class="hud-block">
+        <div class="hud-label">⚔ Kills</div>
+        <div class="hud-value">0</div>
+      </div>
+
+      <div style="flex:1"></div>
+
+      <!-- Speed controls -->
+      <div class="hud-speed">
+        <div class="hud-label">Speed</div>
+        <div style="display:flex;gap:4px;">
+          <div class="speed-btn active">1×</div>
+          <div class="speed-btn">2×</div>
+        </div>
+      </div>
+
+      <!-- Start wave button -->
+      <button id="start-btn">▶ Start Wave 1</button>
+
+    </div>
+
+    <!-- Bottom row: soldier tray -->
+    <div class="hud-bottom">
+      <div class="tray-label">Soldiers</div>
+
+      <div class="soldier-tray">
+
+        <!-- Archer -->
+        <div class="soldier-card selected">
+          <div class="soldier-level">Lv1</div>
+          <div class="soldier-icon">🏹</div>
+          <div class="soldier-name">Archer</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:45%;background:#80e030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:80%;background:#80e030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:58%;background:#80e030"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost">🪙 50</div>
+        </div>
+
+        <!-- Crossbowman -->
+        <div class="soldier-card">
+          <div class="soldier-level">Lv1</div>
+          <div class="soldier-icon">🎯</div>
+          <div class="soldier-name">Crossbow</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:72%;background:#40a0f0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:28%;background:#40a0f0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:90%;background:#40a0f0"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost">🪙 80</div>
+        </div>
+
+        <!-- Mage -->
+        <div class="soldier-card">
+          <div class="soldier-level">Lv1</div>
+          <div class="soldier-icon">⚡</div>
+          <div class="soldier-name">Mage</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:85%;background:#c040f0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:38%;background:#c040f0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:40%;background:#c040f0"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost">🪙 120</div>
+        </div>
+
+        <!-- Knight -->
+        <div class="soldier-card">
+          <div class="soldier-level">Lv1</div>
+          <div class="soldier-icon">⚔</div>
+          <div class="soldier-name">Knight</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:58%;background:#6070d0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:48%;background:#6070d0"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:18%;background:#6070d0"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost">🪙 100</div>
+        </div>
+
+        <!-- Catapult -->
+        <div class="soldier-card">
+          <div class="soldier-level">Lv1</div>
+          <div class="soldier-icon">💣</div>
+          <div class="soldier-name">Catapult</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:100%;background:#e09030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:12%;background:#e09030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:95%;background:#e09030"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost">🪙 200</div>
+        </div>
+
+        <!-- King (unique hero) -->
+        <div class="soldier-card" style="border-color:#c8a020;background:#1e1808;width:90px;">
+          <div class="soldier-level" style="background:#2a1a00;border-color:#f0c030;color:#f0c030;">★</div>
+          <div class="soldier-icon">👑</div>
+          <div class="soldier-name" style="color:#f0c030;">King</div>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">DMG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:90%;background:#f0c030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">SPD</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:62%;background:#f0c030"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <div class="mini-bar-label">RNG</div>
+              <div class="mini-bar-bg"><div class="mini-bar-fill" style="width:35%;background:#f0c030"></div></div>
+            </div>
+          </div>
+          <div class="soldier-cost" style="color:#aaa;font-size:8px;">AUTO-DEPLOY</div>
+        </div>
+
+      </div><!-- end soldier-tray -->
+    </div><!-- end hud-bottom -->
+
+  </div><!-- end hud -->
+</div><!-- end game-frame -->
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<script>
+const COLS = 21, ROWS = 13;
+const CELL = 40;
+
+const PATH = [
+  [0,6],[1,6],[2,6],[3,6],[4,6],
+  [4,5],[4,4],[4,3],[4,2],
+  [5,2],[6,2],[7,2],[8,2],[9,2],[10,2],[11,2],[12,2],[13,2],[14,2],
+  [14,3],[14,4],[14,5],[14,6],[14,7],[14,8],[14,9],[14,10],
+  [15,10],[16,10],[17,10],[18,10],[19,10],[20,10],
+];
+const pathSet = new Set(PATH.map(([c,r]) => `${c},${r}`));
+
+const PLACED = [
+  { col:2,  row:5,  type:'archer',   label:'🏹', color:'#4a9a28' },
+  { col:2,  row:7,  type:'archer',   label:'🏹', color:'#4a9a28' },
+  { col:5,  row:3,  type:'archer',   label:'🏹', color:'#4a9a28' },
+  { col:5,  row:1,  type:'crossbow', label:'🎯', color:'#2a6aaa' },
+  { col:10, row:1,  type:'mage',     label:'⚡', color:'#7a2aaa' },
+  { col:13, row:3,  type:'mage',     label:'⚡', color:'#7a2aaa' },
+  { col:15, row:9,  type:'knight',   label:'⚔', color:'#4a4a9a' },
+  { col:16, row:9,  type:'knight',   label:'⚔', color:'#4a4a9a' },
+];
+const placedSet = new Map(PLACED.map(p => [`${p.col},${p.row}`, p]));
+
+function isPlaceable(c, r) {
+  if (pathSet.has(`${c},${r}`)) return false;
+  if (c >= COLS || r < 0 || r >= ROWS) return false;
+  for (const [dc,dr] of [[-1,0],[1,0],[0,-1],[0,1]])
+    if (pathSet.has(`${c+dc},${r+dr}`)) return true;
+  return false;
+}
+
+const canvas = document.getElementById('map');
+const ctx = canvas.getContext('2d');
+const CX = c => c * CELL;
+const CY = r => r * CELL;
+
+// ── Grass ────────────────────────────────────────────────────────
+function drawGrass(c, r) {
+  ctx.fillStyle = (c + r) % 2 === 0 ? '#3a6a2a' : '#366226';
+  ctx.fillRect(CX(c), CY(r), CELL, CELL);
+  ctx.fillStyle = 'rgba(80,140,50,0.2)';
+  [[c*13+r*7,c*7+r*17],[c*17+r*3,c*11+r*11],[c*5+r*19,c*23+r*5]]
+    .forEach(([dx,dy]) => ctx.fillRect(CX(c)+(dx%28)+4, CY(r)+(dy%28)+4, 3, 2));
+}
+
+// ── Dirt path ────────────────────────────────────────────────────
+function drawPath(c, r) {
+  ctx.fillStyle = '#9a7520';
+  ctx.fillRect(CX(c), CY(r), CELL, CELL);
+  ctx.fillStyle = '#8B6914';
+  ctx.fillRect(CX(c)+2, CY(r)+2, CELL-4, CELL-4);
+  ctx.fillStyle = 'rgba(80,50,5,0.3)';
+  [[c*11+r*5,c*7+r*13],[c*19+r*7,c*3+r*17]].forEach(([dx,dy]) =>
+    ctx.fillRect(CX(c)+(dx%26)+4, CY(r)+(dy%26)+4, 4, 3));
+}
+
+// ── Placeable slot ───────────────────────────────────────────────
+function drawSlot(c, r) {
+  ctx.fillStyle = 'rgba(50,200,60,0.10)';
+  ctx.fillRect(CX(c), CY(r), CELL, CELL);
+  ctx.strokeStyle = 'rgba(80,220,80,0.45)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 3]);
+  ctx.strokeRect(CX(c)+3, CY(r)+3, CELL-6, CELL-6);
+  ctx.setLineDash([]);
+  ctx.strokeStyle = 'rgba(80,220,80,0.3)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(CX(c)+CELL/2-5, CY(r)+CELL/2);
+  ctx.lineTo(CX(c)+CELL/2+5, CY(r)+CELL/2);
+  ctx.moveTo(CX(c)+CELL/2, CY(r)+CELL/2-5);
+  ctx.lineTo(CX(c)+CELL/2, CY(r)+CELL/2+5);
+  ctx.stroke();
+}
+
+// ── Occupied cell ────────────────────────────────────────────────
+function drawOccupied(c, r, s) {
+  ctx.fillStyle = 'rgba(40,100,200,0.2)';
+  ctx.fillRect(CX(c), CY(r), CELL, CELL);
+  ctx.strokeStyle = s.color;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(CX(c)+2, CY(r)+2, CELL-4, CELL-4);
+  // Circle bg
+  ctx.fillStyle = s.color + 'cc';
+  ctx.beginPath();
+  ctx.arc(CX(c)+CELL/2, CY(r)+CELL/2, 14, 0, Math.PI*2);
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.font = '16px serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(s.label, CX(c)+CELL/2, CY(r)+CELL/2);
+  // Level badge
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 7px Arial';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.fillText('1', CX(c)+CELL-11, CY(r)+3);
+}
+
+// ── Draw all cells ───────────────────────────────────────────────
+for (let r = 0; r < ROWS; r++) {
+  for (let c = 0; c < COLS; c++) {
+    const key = `${c},${r}`;
+    if (pathSet.has(key))         drawPath(c, r);
+    else                          drawGrass(c, r);
+    if (isPlaceable(c,r) && !placedSet.has(key)) drawSlot(c, r);
+    if (placedSet.has(key))       drawOccupied(c, r, placedSet.get(key));
+  }
+}
+
+// ── Grid lines ───────────────────────────────────────────────────
+ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+ctx.lineWidth = 0.5;
+for (let c = 0; c <= COLS; c++) {
+  ctx.beginPath(); ctx.moveTo(CX(c), 0); ctx.lineTo(CX(c), ROWS*CELL); ctx.stroke();
+}
+for (let r = 0; r <= ROWS; r++) {
+  ctx.beginPath(); ctx.moveTo(0, CY(r)); ctx.lineTo(COLS*CELL, CY(r)); ctx.stroke();
+}
+
+// ── Direction arrows on path ─────────────────────────────────────
+function drawArrow(fc, fr, tc, tr) {
+  const x1=CX(fc)+CELL/2, y1=CY(fr)+CELL/2;
+  const x2=CX(tc)+CELL/2, y2=CY(tr)+CELL/2;
+  const a = Math.atan2(y2-y1, x2-x1);
+  const mx=(x1+x2)/2, my=(y1+y2)/2, L=10;
+  ctx.strokeStyle='rgba(255,230,100,0.55)';
+  ctx.fillStyle='rgba(255,230,100,0.55)';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(mx-Math.cos(a)*L, my-Math.sin(a)*L);
+  ctx.lineTo(mx+Math.cos(a)*L, my+Math.sin(a)*L);
+  ctx.moveTo(mx+Math.cos(a)*L, my+Math.sin(a)*L);
+  ctx.lineTo(mx+Math.cos(a+2.4)*6, my+Math.sin(a+2.4)*6);
+  ctx.moveTo(mx+Math.cos(a)*L, my+Math.sin(a)*L);
+  ctx.lineTo(mx+Math.cos(a-2.4)*6, my+Math.sin(a-2.4)*6);
+  ctx.stroke();
+}
+[[1,6,2,6],[3,6,4,6],[4,4,4,3],[4,2,4,2],
+ [6,2,8,2],[10,2,12,2],[13,2,14,2],
+ [14,4,14,5],[14,7,14,8],[14,9,14,10],
+ [15,10,17,10],[18,10,19,10]
+].forEach(([fc,fr,tc,tr]) => drawArrow(fc,fr,tc,tr));
+
+// ── Enemy Spawn portal ───────────────────────────────────────────
+const sx = CX(0)+CELL/2, sy = CY(6)+CELL/2;
+const sg = ctx.createRadialGradient(sx,sy,2,sx,sy,24);
+sg.addColorStop(0,'rgba(255,60,40,0.95)');
+sg.addColorStop(1,'rgba(180,0,0,0)');
+ctx.fillStyle = sg;
+ctx.beginPath(); ctx.arc(sx, sy, 24, 0, Math.PI*2); ctx.fill();
+ctx.strokeStyle='#ff4040'; ctx.lineWidth=2; ctx.setLineDash([4,3]);
+ctx.beginPath(); ctx.arc(sx, sy, 20, 0, Math.PI*2); ctx.stroke();
+ctx.setLineDash([]);
+ctx.font='16px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+ctx.fillText('💀', sx, sy);
+// Label above
+ctx.fillStyle='rgba(0,0,0,0.6)';
+ctx.beginPath(); ctx.roundRect(sx-28, CY(6)-22, 56, 18, 4); ctx.fill();
+ctx.fillStyle='#ff6060'; ctx.font='bold 8px Arial Black';
+ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+ctx.fillText('ENEMY SPAWN', sx, CY(6)-8);
+
+// ── Castle ───────────────────────────────────────────────────────
+const castleC = 20, castleR = 9;
+const cx0 = CX(castleC)+2, cy0 = CY(castleR);
+const cw=36, ch=CELL*2;
+
+// Shadow
+ctx.fillStyle='rgba(0,0,0,0.35)';
+ctx.beginPath(); ctx.ellipse(cx0+cw/2, cy0+ch+6, cw/2, 6, 0, 0, Math.PI*2); ctx.fill();
+
+// Wall body
+const wallGrad = ctx.createLinearGradient(cx0, cy0, cx0+cw, cy0);
+wallGrad.addColorStop(0, '#a0a0b0');
+wallGrad.addColorStop(0.5, '#c0c0d0');
+wallGrad.addColorStop(1, '#909098');
+ctx.fillStyle = wallGrad;
+ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2.5;
+ctx.beginPath(); ctx.roundRect(cx0, cy0+12, cw, ch-12, [0,0,4,4]); ctx.fill(); ctx.stroke();
+
+// Battlements
+for (let i=0; i<3; i++) {
+  ctx.fillStyle = '#9898a8';
+  ctx.beginPath(); ctx.roundRect(cx0+2+i*12, cy0, 9, 16, [3,3,0,0]); ctx.fill(); ctx.stroke();
+}
+// Wall horizontal lines
+ctx.strokeStyle='rgba(80,80,100,0.5)'; ctx.lineWidth=1;
+[cy0+28, cy0+44, cy0+60].forEach(y => {
+  ctx.beginPath(); ctx.moveTo(cx0+2, y); ctx.lineTo(cx0+cw-2, y); ctx.stroke();
+});
+// Gate
+ctx.fillStyle='#3a2a10'; ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=2;
+ctx.beginPath(); ctx.roundRect(cx0+10, cy0+ch-24, 16, 24, [8,8,0,0]); ctx.fill(); ctx.stroke();
+// Gate bars
+ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1;
+for (let i=0; i<2; i++) {
+  ctx.beginPath();
+  ctx.moveTo(cx0+14+i*7, cy0+ch-22);
+  ctx.lineTo(cx0+14+i*7, cy0+ch-2);
+  ctx.stroke();
+}
+// Window
+ctx.fillStyle='#ffee80';
+ctx.beginPath(); ctx.arc(cx0+cw/2, cy0+30, 7, 0, Math.PI*2); ctx.fill();
+ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=1.5; ctx.stroke();
+ctx.font='10px serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+ctx.fillText('👑', cx0+cw/2, cy0+30);
+// "CASTLE" tag
+ctx.fillStyle='rgba(0,0,0,0.55)';
+ctx.beginPath(); ctx.roundRect(cx0-4, cy0+ch+10, cw+8, 16, 4); ctx.fill();
+ctx.fillStyle='#f0c030'; ctx.font='bold 8px Arial Black';
+ctx.textAlign='center'; ctx.textBaseline='alphabetic';
+ctx.fillText('CASTLE', cx0+cw/2, cy0+ch+22);
+
+</script>
+
+</body>
+</html>
