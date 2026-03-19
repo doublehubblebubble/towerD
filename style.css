@@ -1,0 +1,536 @@
+/* ============================================================
+   style.css  —  Tower Defense dark medieval theme
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #111;
+  font-family: 'Arial Black', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 20px 10px;
+  color: #e0d0a0;
+}
+
+h1 {
+  font-size: 18px;
+  letter-spacing: 4px;
+  color: #f0c030;
+  text-shadow: 0 0 12px rgba(240,192,48,0.5);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   Game frame
+   ============================================================ */
+#game-frame {
+  width: 840px;
+  border: 3px solid #c8a020;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow:
+    0 0 30px rgba(200,160,32,0.35),
+    0 0 60px rgba(200,160,32,0.15),
+    0 8px 40px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+canvas#game-canvas {
+  display: block;
+  cursor: crosshair;
+  width: 840px;
+  height: 520px;
+}
+
+/* ============================================================
+   HUD
+   ============================================================ */
+#hud {
+  background: linear-gradient(180deg, #1a1208 0%, #0e0c06 100%);
+  border-top: 3px solid #c8a020;
+  padding: 12px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Top row */
+.hud-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+}
+
+.hud-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hud-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #806030;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hud-value {
+  font-size: 15px;
+  font-weight: 900;
+  color: #f0c030;
+  text-shadow: 0 0 8px rgba(240,192,48,0.4);
+  white-space: nowrap;
+}
+
+.hud-value.danger {
+  color: #ff4444;
+  text-shadow: 0 0 8px rgba(255,68,68,0.5);
+}
+
+.divider {
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(180deg, transparent, #604820 30%, #604820 70%, transparent);
+  flex-shrink: 0;
+}
+
+/* HP bar */
+.bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.bar-track {
+  width: 100px;
+  height: 13px;
+  background: #1a1208;
+  border: 1px solid #483010;
+  border-radius: 7px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+#hp-bar-fill {
+  width: 100%;
+  background: linear-gradient(90deg, #22aa22, #44cc44);
+}
+
+/* Wave progress bar */
+.wave-bar-track {
+  width: 120px;
+  height: 13px;
+  background: #1a1208;
+  border: 1px solid #483010;
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+#wave-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #c85010, #f08020);
+  border-radius: 7px;
+  transition: width 0.5s ease;
+}
+
+/* Speed buttons */
+.speed-controls {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.speed-label {
+  font-size: 9px;
+  color: #806030;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: Arial, sans-serif;
+}
+
+.speed-btn {
+  background: #1e1810;
+  border: 1px solid #483820;
+  border-radius: 4px;
+  color: #806030;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+.speed-btn:hover {
+  background: #2a2010;
+  border-color: #907040;
+  color: #c0a050;
+}
+
+.speed-btn.active {
+  background: #2a2010;
+  border-color: #f0c030;
+  color: #f0c030;
+  box-shadow: 0 0 6px rgba(240,192,48,0.3);
+}
+
+/* Start button */
+#start-btn {
+  background: linear-gradient(180deg, #c8a020 0%, #906010 100%);
+  border: 2px solid #f0c030;
+  border-radius: 6px;
+  color: #1a1000;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgba(255,220,100,0.3);
+  box-shadow: 0 2px 8px rgba(200,160,32,0.3), inset 0 1px 0 rgba(255,240,180,0.2);
+  font-family: 'Arial Black', Arial, sans-serif;
+  flex-shrink: 0;
+}
+
+#start-btn:hover:not(:disabled) {
+  transform: scale(1.04);
+  box-shadow: 0 4px 14px rgba(200,160,32,0.5);
+}
+
+#start-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+#start-btn:disabled {
+  background: linear-gradient(180deg, #484030 0%, #302820 100%);
+  border-color: #504030;
+  color: #605040;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Next wave label */
+#next-wave-label {
+  font-size: 10px;
+  color: #a08050;
+  font-family: Arial, sans-serif;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Bottom row (tray)
+   ============================================================ */
+.hud-bottom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tray-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #806030;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Soldier tray */
+.soldier-tray {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Soldier card */
+.soldier-card {
+  width: 88px;
+  background: #16120a;
+  border: 1.5px solid #483820;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 6px 7px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  user-select: none;
+}
+
+.soldier-card:hover {
+  background: #201a0e;
+  border-color: #906840;
+  box-shadow: 0 0 8px rgba(200,160,32,0.2);
+}
+
+.soldier-card.selected {
+  background: #201a08;
+  border-color: #f0c030;
+  box-shadow: 0 0 12px rgba(240,192,48,0.35), inset 0 0 8px rgba(240,192,48,0.06);
+}
+
+.soldier-card.cant-afford {
+  opacity: 0.45;
+}
+
+.soldier-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.soldier-name {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #c8a060;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.soldier-cost {
+  font-size: 11px;
+  font-weight: 900;
+  color: #f0c030;
+}
+
+/* Level badge on card */
+.soldier-lv-badge {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  font-size: 8px;
+  color: #f0c030;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+/* Mini stat bars */
+.mini-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 0 2px;
+}
+
+.mini-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.mini-bar-label {
+  font-size: 7px;
+  color: #706050;
+  font-family: Arial, sans-serif;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.mini-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: #2a2010;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mini-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+}
+
+.mini-bar-fill.dmg  { background: #cc4422; }
+.mini-bar-fill.rng  { background: #2288cc; }
+.mini-bar-fill.spd  { background: #22aa44; }
+
+/* ============================================================
+   Upgrade panel
+   ============================================================ */
+#upgrade-panel {
+  display: none;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 150px;
+  max-width: 175px;
+  background: #1a1006;
+  border: 1.5px solid #c8a020;
+  border-radius: 8px;
+  padding: 12px 10px;
+  margin-left: auto;
+  position: relative;
+}
+
+#up-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f0c030;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+#upgrade-btn {
+  background: linear-gradient(180deg, #1a6a1a, #0e4a0e);
+  border: 1.5px solid #44aa44;
+  border-radius: 5px;
+  color: #88ee88;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+#upgrade-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #228822, #166016);
+  box-shadow: 0 0 8px rgba(68,170,68,0.4);
+}
+
+#upgrade-btn:disabled {
+  cursor: not-allowed;
+}
+
+#sell-btn {
+  background: linear-gradient(180deg, #6a1a1a, #4a0e0e);
+  border: 1.5px solid #aa4444;
+  border-radius: 5px;
+  color: #ee8888;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Arial Black', Arial, sans-serif;
+}
+
+#sell-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #882222, #601616);
+  box-shadow: 0 0 8px rgba(170,68,68,0.4);
+}
+
+#close-panel-btn {
+  position: absolute;
+  top: 5px;
+  right: 7px;
+  background: transparent;
+  border: 1px solid #483820;
+  border-radius: 3px;
+  color: #806030;
+  font-size: 11px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: Arial, sans-serif;
+  line-height: 1;
+  padding: 0;
+}
+
+#close-panel-btn:hover {
+  background: #2a1a0a;
+  border-color: #906040;
+  color: #c0a060;
+}
+
+/* ============================================================
+   Overlay (game over / victory)
+   ============================================================ */
+#overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  backdrop-filter: blur(3px);
+}
+
+.overlay-box {
+  background: linear-gradient(180deg, #1e1808 0%, #0e0c04 100%);
+  border: 2px solid #c8a020;
+  border-radius: 16px;
+  padding: 40px 50px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(200,160,32,0.3), 0 20px 80px rgba(0,0,0,0.8);
+  min-width: 320px;
+}
+
+.overlay-title {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px currentColor;
+  margin-bottom: 16px;
+}
+
+.overlay-stat {
+  font-size: 14px;
+  color: #c0b080;
+  margin: 8px 0;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+}
+
+.overlay-btn {
+  margin-top: 24px;
+  background: linear-gradient(180deg, #c8a020 0%, #906010 100%);
+  border: 2px solid #f0c030;
+  border-radius: 8px;
+  color: #1a1000;
+  font-size: 15px;
+  font-weight: 900;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Arial Black', Arial, sans-serif;
+  box-shadow: 0 4px 16px rgba(200,160,32,0.3);
+}
+
+.overlay-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 22px rgba(200,160,32,0.5);
+}
+
+/* ============================================================
+   Scrollbar (minimal)
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #111; }
+::-webkit-scrollbar-thumb { background: #484030; border-radius: 3px; }

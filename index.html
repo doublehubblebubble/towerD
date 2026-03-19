@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tower Defense — The King's Road</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>⚔ The King's Road ⚔</h1>
+
+<div id="game-frame">
+
+  <!-- ===== Canvas ===== -->
+  <canvas id="game-canvas" width="840" height="520"></canvas>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud">
+
+    <!-- Top row -->
+    <div class="hud-top">
+
+      <!-- Wave counter -->
+      <div class="hud-block">
+        <span class="hud-label">Wave</span>
+        <span class="hud-value" id="wave-display">— / 20</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Wave progress bar -->
+      <div class="hud-block">
+        <span class="hud-label">Progress</span>
+        <div class="wave-bar-track">
+          <div id="wave-bar-fill"></div>
+        </div>
+        <span id="next-wave-label" style="font-size:9px;color:#a08050;font-family:Arial,sans-serif;margin-top:1px;"></span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Castle HP -->
+      <div class="hud-block">
+        <span class="hud-label">Castle HP</span>
+        <span class="hud-value" id="hp-display">1000 / 1000</span>
+        <div class="bar-track" style="width:90px;">
+          <div class="bar-fill" id="hp-bar-fill"></div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Coins -->
+      <div class="hud-block">
+        <span class="hud-label">Gold</span>
+        <span class="hud-value" id="coin-display">100g</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Kills -->
+      <div class="hud-block">
+        <span class="hud-label">Kills</span>
+        <span class="hud-value" id="kill-display">0</span>
+      </div>
+
+      <!-- Speed controls + start button (right side) -->
+      <div class="speed-controls">
+        <span class="speed-label">Speed</span>
+        <button class="speed-btn active" data-speed="1">1×</button>
+        <button class="speed-btn" data-speed="2">2×</button>
+        <button class="speed-btn" data-speed="3">3×</button>
+      </div>
+
+      <button id="start-btn">▶ Start Wave 1  (auto 15s)</button>
+
+    </div><!-- /.hud-top -->
+
+    <!-- Bottom row -->
+    <div class="hud-bottom">
+
+      <span class="tray-label">Soldiers</span>
+
+      <div class="soldier-tray">
+
+        <!-- Archer -->
+        <div class="soldier-card selected" data-type="archer">
+          <span class="soldier-lv-badge">Lv1</span>
+          <span class="soldier-icon">🏹</span>
+          <span class="soldier-name">Archer</span>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">DMG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill dmg" style="width:28%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">RNG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill rng" style="width:50%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">SPD</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill spd" style="width:70%"></div></div>
+            </div>
+          </div>
+          <span class="soldier-cost">50g</span>
+        </div>
+
+        <!-- Crossbow -->
+        <div class="soldier-card" data-type="crossbow">
+          <span class="soldier-lv-badge">Lv1</span>
+          <span class="soldier-icon">🎯</span>
+          <span class="soldier-name">Crossbow</span>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">DMG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill dmg" style="width:55%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">RNG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill rng" style="width:72%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">SPD</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill spd" style="width:38%"></div></div>
+            </div>
+          </div>
+          <span class="soldier-cost">80g</span>
+        </div>
+
+        <!-- Mage -->
+        <div class="soldier-card" data-type="mage">
+          <span class="soldier-lv-badge">Lv1</span>
+          <span class="soldier-icon">⚡</span>
+          <span class="soldier-name">Mage</span>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">DMG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill dmg" style="width:65%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">RNG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill rng" style="width:40%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">SPD</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill spd" style="width:44%"></div></div>
+            </div>
+          </div>
+          <span class="soldier-cost">120g</span>
+        </div>
+
+        <!-- Knight -->
+        <div class="soldier-card" data-type="knight">
+          <span class="soldier-lv-badge">Lv1</span>
+          <span class="soldier-icon">⚔</span>
+          <span class="soldier-name">Knight</span>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">DMG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill dmg" style="width:48%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">RNG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill rng" style="width:15%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">SPD</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill spd" style="width:60%"></div></div>
+            </div>
+          </div>
+          <span class="soldier-cost">100g</span>
+        </div>
+
+        <!-- Catapult -->
+        <div class="soldier-card" data-type="catapult">
+          <span class="soldier-lv-badge">Lv1</span>
+          <span class="soldier-icon">💣</span>
+          <span class="soldier-name">Catapult</span>
+          <div class="mini-bars">
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">DMG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill dmg" style="width:90%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">RNG</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill rng" style="width:85%"></div></div>
+            </div>
+            <div class="mini-bar-row">
+              <span class="mini-bar-label">SPD</span>
+              <div class="mini-bar-bg"><div class="mini-bar-fill spd" style="width:18%"></div></div>
+            </div>
+          </div>
+          <span class="soldier-cost">200g</span>
+        </div>
+
+      </div><!-- /.soldier-tray -->
+
+      <!-- Upgrade panel (hidden by default) -->
+      <div id="upgrade-panel">
+        <button id="close-panel-btn" title="Close">✕</button>
+        <div id="up-name">Select a soldier</div>
+        <button id="upgrade-btn">⬆ Upgrade</button>
+        <button id="sell-btn">💰 Sell</button>
+      </div>
+
+    </div><!-- /.hud-bottom -->
+
+  </div><!-- /#hud -->
+
+</div><!-- /#game-frame -->
+
+<!-- Overlay (game over / victory) -->
+<div id="overlay"></div>
+
+<!-- Scripts — load order matters: constants → entities → game → ui -->
+<script src="src/constants.js"></script>
+<script src="src/entities.js"></script>
+<script src="src/game.js"></script>
+<script src="src/ui.js"></script>
+
+</body>
+</html>
