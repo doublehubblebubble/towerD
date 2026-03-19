@@ -239,16 +239,15 @@ Object.defineProperty(Soldier.prototype, 'damage', {
   get: function() { return this.def.damage[this.level - 1]; }
 });
 Object.defineProperty(Soldier.prototype, 'range', {
-  get: function() { return this.def.range[this.level - 1]; }
+  // range is a fixed number — does NOT scale with level
+  get: function() { return this.def.range; }
 });
 Object.defineProperty(Soldier.prototype, 'fireRate', {
   get: function() { return this.def.fireRate[this.level - 1]; }
 });
 Object.defineProperty(Soldier.prototype, 'aoeRadius', {
-  get: function() {
-    if (!this.def.aoeRadius) return 0;
-    return this.def.aoeRadius[this.level - 1];
-  }
+  // aoeRadius is a fixed number — does NOT scale with level
+  get: function() { return this.def.aoeRadius || 0; }
 });
 Object.defineProperty(Soldier.prototype, 'maxLevel', {
   get: function() { return 3; }

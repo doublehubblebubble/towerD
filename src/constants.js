@@ -59,47 +59,49 @@ var SOLDIER_DEFS = {
   archer: {
     cost: 50,
     color: '#4a9a28', bgColor: '#2a5a14', emoji: '🏹',
-    damage:    [15, 22, 35],
-    range:     [120, 145, 170],
-    fireRate:  [1.2, 1.5, 2.0],
+    damage:    [15, 25, 40],     // Lv1→2→3: damage only scales up
+    range:     120,               // fixed — upgrades do NOT increase range
+    fireRate:  [1.2, 1.6, 2.2],
     projSpeed: 220, projColor: '#8B4513', projRadius: 4,
     aoe: false, melee: false
   },
   crossbow: {
     cost: 80,
     color: '#2a6aaa', bgColor: '#1a3a6a', emoji: '🎯',
-    damage:    [35, 55, 80],
-    range:     [180, 200, 220],
-    fireRate:  [0.6, 0.8, 1.0],
+    damage:    [35, 60, 95],
+    range:     180,
+    fireRate:  [0.6, 0.85, 1.1],
     projSpeed: 300, projColor: '#4488cc', projRadius: 5,
     aoe: false, melee: false
   },
   mage: {
     cost: 120,
     color: '#7a2aaa', bgColor: '#4a1070', emoji: '⚡',
-    damage:    [40, 65, 100],
-    range:     [100, 120, 140],
-    fireRate:  [0.7, 0.9, 1.1],
+    damage:    [40, 70, 110],
+    range:     110,
+    fireRate:  [0.7, 1.0, 1.3],
     projSpeed: 180, projColor: '#cc44ff', projRadius: 8,
-    aoe: true, aoeRadius: [50, 65, 80], melee: false
+    aoe: true, aoeRadius: 60,    // fixed AOE radius
+    melee: false
   },
   knight: {
     cost: 100,
     color: '#4a4a9a', bgColor: '#2a2a6a', emoji: '⚔',
-    damage:    [30, 50, 75],
-    range:     [48, 48, 56],
-    fireRate:  [1.0, 1.2, 1.5],
+    damage:    [30, 55, 85],
+    range:     48,
+    fireRate:  [1.0, 1.4, 1.8],
     projSpeed: 0, projColor: '#6070d0', projRadius: 0,
     aoe: false, melee: true
   },
   catapult: {
     cost: 200,
     color: '#c87820', bgColor: '#7a4810', emoji: '💣',
-    damage:    [80, 130, 200],
-    range:     [220, 250, 280],
-    fireRate:  [0.3, 0.4, 0.5],
+    damage:    [80, 140, 220],
+    range:     230,
+    fireRate:  [0.3, 0.45, 0.6],
     projSpeed: 140, projColor: '#cc6600', projRadius: 10,
-    aoe: true, aoeRadius: [80, 100, 120], melee: false
+    aoe: true, aoeRadius: 90,    // fixed AOE radius
+    melee: false
   }
 };
 
