@@ -29,6 +29,7 @@ function Game() {
 
   this.selectedSoldierType = 'archer';
   this.selectedSoldier     = null;
+  this.paused              = false;
 
   // Pre-render background to an offscreen canvas
   this.bgCanvas        = document.createElement('canvas');
@@ -286,7 +287,7 @@ Game.prototype._loop = function(timestamp) {
   var rawDt = Math.min((timestamp - this._lastTime) / 1000, 0.05);
   this._lastTime = timestamp;
 
-  if (this.state !== 'gameover' && this.state !== 'victory') {
+  if (this.state !== 'gameover' && this.state !== 'victory' && !this.paused) {
     this._update(rawDt);
   }
 

@@ -15,6 +15,21 @@
   <!-- ===== Canvas ===== -->
   <canvas id="game-canvas" width="840" height="520"></canvas>
 
+  <!-- ===== Pause button (floats over canvas) ===== -->
+  <button id="pause-btn" title="Pause (P)">⏸</button>
+
+  <!-- ===== Pause modal ===== -->
+  <div id="pause-modal">
+    <div class="pause-box">
+      <div class="pause-title">⏸ PAUSED</div>
+      <div class="pause-sub">THE KING'S ROAD</div>
+      <div class="pause-actions">
+        <button class="pause-btn-resume" id="resume-btn">▶ Resume</button>
+        <button class="pause-btn-exit"   id="exit-btn">✕ Exit Game</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ===== HUD ===== -->
   <div id="hud">
 

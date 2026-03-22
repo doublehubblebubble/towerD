@@ -98,6 +98,55 @@ function setupEvents() {
   document.addEventListener('click', ensureMusic, { once: true });
   document.addEventListener('keydown', ensureMusic, { once: true });
 
+  // Pause button + modal
+  var pauseBtn  = document.getElementById('pause-btn');
+  var pauseModal = document.getElementById('pause-modal');
+  var resumeBtn = document.getElementById('resume-btn');
+  var exitBtn   = document.getElementById('exit-btn');
+
+  function openPause() {
+    if (game.state === 'gameover' || game.state === 'victory') return;
+    game.paused = true;
+    AudioManager.stop();
+    pauseBtn.textContent = '▶';
+    pauseModal.classList.add('visible');
+  }
+
+  function closePause() {
+    game.paused = false;
+    AudioManager.start();
+    pauseBtn.textContent = '⏸';
+    pauseModal.classList.remove('visible');
+    game._lastTime = null; // prevent dt spike after unpause
+  }
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', function() {
+      if (game.paused) { closePause(); } else { openPause(); }
+    });
+  }
+
+  if (resumeBtn) {
+    resumeBtn.addEventListener('click', closePause);
+  }
+
+  if (exitBtn) {
+    exitBtn.addEventListener('click', function() {
+      location.reload();
+    });
+  }
+
+  // Keyboard shortcut: P to toggle pause
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+      if (pauseModal.classList.contains('visible')) {
+        closePause();
+      } else {
+        openPause();
+      }
+    }
+  });
+
   // Mute button
   var muteBtn = document.getElementById('mute-btn');
   if (muteBtn) {
