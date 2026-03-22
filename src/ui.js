@@ -90,6 +90,24 @@ function setupEvents() {
     })(cards[ci]));
   }
 
+  // Music: start on first user interaction (browser autoplay policy)
+  var musicStarted = false;
+  function ensureMusic() {
+    if (!musicStarted) { musicStarted = true; AudioManager.start(); }
+  }
+  document.addEventListener('click', ensureMusic, { once: true });
+  document.addEventListener('keydown', ensureMusic, { once: true });
+
+  // Mute button
+  var muteBtn = document.getElementById('mute-btn');
+  if (muteBtn) {
+    muteBtn.addEventListener('click', function() {
+      musicStarted = true; // may be the first interaction
+      var nowPlaying = AudioManager.toggle();
+      muteBtn.textContent = nowPlaying ? '🔊' : '🔇';
+    });
+  }
+
   // Start button
   var startBtn = document.getElementById('start-btn');
   if (startBtn) {
