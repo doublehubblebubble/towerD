@@ -361,6 +361,7 @@ Game.prototype._update = function(rawDt) {
           var hit  = hits[h];
           var wasAlive = !hit.enemy.dead;
           hit.enemy.takeDamage(hit.damage);
+          if (hit.slow) hit.enemy.applySlow(hit.slowFactor, hit.slowDuration);
           if (wasAlive && hit.enemy.dead) {
             // Enemy killed
             this.kills++;

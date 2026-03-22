@@ -102,10 +102,20 @@ var SOLDIER_DEFS = {
     projSpeed: 140, projColor: '#cc6600', projRadius: 10,
     aoe: true, aoeRadius: 90,    // fixed AOE radius
     melee: false
+  },
+  glacier: {
+    cost: 90,
+    color: '#2aaad4', bgColor: '#1a6a84', emoji: '❄️',
+    damage:    [5, 10, 18],      // low damage
+    range:     130,
+    fireRate:  [0.9, 1.3, 1.8],
+    projSpeed: 200, projColor: '#88ddff', projRadius: 6,
+    aoe: false, melee: false,
+    slow: true, slowFactor: 0.45, slowDuration: 2.0
   }
 };
 
-var SOLDIER_ORDER = ['archer', 'crossbow', 'mage', 'knight', 'catapult'];
+var SOLDIER_ORDER = ['archer', 'crossbow', 'mage', 'knight', 'catapult', 'glacier'];
 
 // ============================================================
 //  ENEMY_DEFS

@@ -18,7 +18,7 @@ function drawRoundRect(ctx, x, y, w, h, r) {
 // ============================================================
 //  class Projectile
 // ============================================================
-function Projectile(sx, sy, target, damage, speed, color, radius, aoe, aoeRadius) {
+function Projectile(sx, sy, target, damage, speed, color, radius, aoe, aoeRadius, slow, slowFactor, slowDuration) {
   this.x            = sx;
   this.y            = sy;
   this.target       = target;
@@ -28,6 +28,9 @@ function Projectile(sx, sy, target, damage, speed, color, radius, aoe, aoeRadius
   this.radius       = radius;
   this.aoe          = aoe;
   this.aoeRadius    = aoeRadius || 0;
+  this.slow         = slow || false;
+  this.slowFactor   = slowFactor || 1;
+  this.slowDuration = slowDuration || 0;
   this.lastTargetX  = target ? target.x : sx;
   this.lastTargetY  = target ? target.y : sy;
   this.dead         = false;
@@ -56,13 +59,13 @@ Projectile.prototype.update = function(dt, enemies) {
         var ex = e.x - this.lastTargetX;
         var ey = e.y - this.lastTargetY;
         if (Math.sqrt(ex * ex + ey * ey) <= this.aoeRadius) {
-          hits.push({ enemy: e, damage: this.damage });
+          hits.push({ enemy: e, damage: this.damage, slow: this.slow, slowFactor: this.slowFactor, slowDuration: this.slowDuration });
         }
       }
     } else {
       // Single target – only if target still alive
       if (this.target && !this.target.dead) {
-        hits.push({ enemy: this.target, damage: this.damage });
+        hits.push({ enemy: this.target, damage: this.damage, slow: this.slow, slowFactor: this.slowFactor, slowDuration: this.slowDuration });
       }
     }
     return hits;
@@ -112,6 +115,8 @@ function Enemy(type, hpMultiplier) {
   this.dead          = false;
   this.reachedCastle = false;
   this.flashTimer    = 0;
+  this.slowTimer     = 0;
+  this.slowFactor    = 1;
 }
 
 Enemy.prototype.update = function(dt) {
@@ -124,6 +129,11 @@ Enemy.prototype.update = function(dt) {
   if (this.flashTimer > 0) {
     this.flashTimer -= dt;
     if (this.flashTimer < 0) this.flashTimer = 0;
+  }
+
+  if (this.slowTimer > 0) {
+    this.slowTimer -= dt;
+    if (this.slowTimer < 0) this.slowTimer = 0;
   }
 
   var wp = WAYPOINTS[this.waypointIndex];
@@ -140,10 +150,16 @@ Enemy.prototype.update = function(dt) {
     return;
   }
 
-  var step = this.speed * dt;
+  var effectiveSpeed = this.speed * (this.slowTimer > 0 ? this.slowFactor : 1);
+  var step = effectiveSpeed * dt;
   if (step > dist) step = dist;
   this.x += (dx / dist) * step;
   this.y += (dy / dist) * step;
+};
+
+Enemy.prototype.applySlow = function(factor, duration) {
+  this.slowTimer  = duration;
+  this.slowFactor = factor;
 };
 
 Enemy.prototype.takeDamage = function(amount) {
@@ -172,11 +188,13 @@ Enemy.prototype.draw = function(ctx) {
   ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
   if (this.flashTimer > 0) {
     ctx.fillStyle = '#ff3333';
+  } else if (this.slowTimer > 0) {
+    ctx.fillStyle = '#66ccff';
   } else {
     ctx.fillStyle = this.color;
   }
   ctx.fill();
-  ctx.strokeStyle = this.outlineColor;
+  ctx.strokeStyle = this.slowTimer > 0 ? '#0088cc' : this.outlineColor;
   ctx.lineWidth   = 2;
   ctx.stroke();
   ctx.restore();
@@ -310,7 +328,10 @@ Soldier.prototype.update = function(dt, enemies) {
     this.def.projColor,
     this.def.projRadius,
     this.def.aoe,
-    this.aoeRadius
+    this.aoeRadius,
+    this.def.slow || false,
+    this.def.slowFactor || 1,
+    this.def.slowDuration || 0
   );
 };
 
