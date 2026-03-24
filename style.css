@@ -680,3 +680,237 @@ canvas#game-canvas {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #111; }
 ::-webkit-scrollbar-thumb { background: #484030; border-radius: 3px; }
+
+/* ============================================================
+   Main Menu
+   ============================================================ */
+#main-menu {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 40%, #1e1808 0%, #0a0800 70%, #050400 100%);
+  z-index: 200;
+}
+
+#main-menu.hidden { display: none; }
+
+.menu-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-crown {
+  font-size: 62px;
+  filter: drop-shadow(0 0 18px rgba(240,192,48,0.75));
+  animation: crown-float 3.2s ease-in-out infinite;
+  line-height: 1;
+}
+
+@keyframes crown-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+.menu-title {
+  font-size: 40px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-weight: 900;
+  color: #f0c030;
+  text-shadow: 0 0 22px rgba(240,192,48,0.65), 0 0 44px rgba(240,192,48,0.25);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+}
+
+.menu-subtitle {
+  font-size: 13px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  color: #806030;
+  letter-spacing: 5px;
+  text-align: center;
+  margin: 0;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  width: 270px;
+  margin-top: 14px;
+}
+
+.menu-btn {
+  width: 100%;
+  padding: 15px 20px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.7);
+}
+
+/* Gold — Start */
+.menu-btn-start {
+  background: linear-gradient(180deg, #2e2008 0%, #1a1204 100%);
+  color: #f0c030;
+  border: 2px solid #c8a020;
+}
+.menu-btn-start:hover {
+  background: linear-gradient(180deg, #3e2c0c 0%, #271a08 100%);
+  border-color: #f0c030;
+  box-shadow: 0 0 22px rgba(240,192,48,0.4), 0 3px 14px rgba(0,0,0,0.7);
+  color: #fff5c0;
+}
+
+/* Blue-silver — Settings */
+.menu-btn-settings {
+  background: linear-gradient(180deg, #0c1826 0%, #080e18 100%);
+  color: #90b8d8;
+  border: 2px solid #3a5a7a;
+}
+.menu-btn-settings:hover {
+  background: linear-gradient(180deg, #142232 0%, #0c1622 100%);
+  border-color: #6a9abb;
+  box-shadow: 0 0 22px rgba(80,140,200,0.3), 0 3px 14px rgba(0,0,0,0.7);
+  color: #c8e4f8;
+}
+
+/* Red — Quit */
+.menu-btn-quit {
+  background: linear-gradient(180deg, #1e0a08 0%, #120604 100%);
+  color: #d07070;
+  border: 2px solid #6a2828;
+}
+.menu-btn-quit:hover {
+  background: linear-gradient(180deg, #2c100e 0%, #1a0808 100%);
+  border-color: #cc4040;
+  box-shadow: 0 0 22px rgba(200,60,60,0.3), 0 3px 14px rgba(0,0,0,0.7);
+  color: #ffaaaa;
+}
+
+.menu-btn:active { transform: translateY(1px); }
+
+/* ============================================================
+   Settings Modal
+   ============================================================ */
+#settings-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.8);
+  z-index: 300;
+  backdrop-filter: blur(3px);
+}
+
+#settings-modal.hidden { display: none; }
+
+.settings-box {
+  background: linear-gradient(180deg, #1e1608 0%, #110e04 100%);
+  border: 2px solid #c8a020;
+  border-radius: 14px;
+  padding: 34px 42px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-width: 340px;
+  box-shadow: 0 0 50px rgba(200,160,32,0.3), 0 10px 50px rgba(0,0,0,0.9);
+}
+
+.settings-title {
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: #f0c030;
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-label {
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 10px;
+  color: #806030;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.seg-btns {
+  display: flex;
+  gap: 7px;
+}
+
+.seg-btn {
+  flex: 1;
+  padding: 9px 6px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: #1a1208;
+  color: #806030;
+  border: 1.5px solid #3a2a12;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.seg-btn:hover {
+  background: #261a0c;
+  color: #c0902a;
+  border-color: #604020;
+}
+
+.seg-btn.active {
+  background: linear-gradient(180deg, #352208 0%, #241608 100%);
+  color: #f0c030;
+  border-color: #c8a020;
+  box-shadow: 0 0 10px rgba(240,192,48,0.2);
+}
+
+#vol-slider {
+  width: 100%;
+  accent-color: #f0c030;
+  cursor: pointer;
+  height: 6px;
+}
+
+/* Back button inside settings reuses .menu-btn style */
+#settings-back-btn {
+  background: linear-gradient(180deg, #1a1208 0%, #100c04 100%);
+  color: #a08040;
+  border: 2px solid #4a3818;
+  margin-top: 4px;
+  padding: 12px 20px;
+  font-family: 'Arial Black', Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+#settings-back-btn:hover {
+  background: linear-gradient(180deg, #261a0c 0%, #180e04 100%);
+  color: #d0a050;
+  border-color: #806030;
+}

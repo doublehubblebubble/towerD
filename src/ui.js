@@ -5,9 +5,9 @@
 var game;
 
 window.onload = function() {
-  game = new Game();
+  loadSettings();
   setupEvents();
-  updateHUD();
+  setupMenuEvents();
 };
 
 // ============================================================
@@ -18,6 +18,7 @@ function setupEvents() {
 
   // Canvas click
   canvas.addEventListener('click', function(e) {
+    if (!game) return;
     var rect   = canvas.getBoundingClientRect();
     var scaleX = canvas.width  / rect.width;
     var scaleY = canvas.height / rect.height;
@@ -44,6 +45,7 @@ function setupEvents() {
 
   // Canvas mousemove: show range for hovered soldier
   canvas.addEventListener('mousemove', function(e) {
+    if (!game) return;
     var rect   = canvas.getBoundingClientRect();
     var scaleX = canvas.width  / rect.width;
     var scaleY = canvas.height / rect.height;
@@ -132,7 +134,11 @@ function setupEvents() {
 
   if (exitBtn) {
     exitBtn.addEventListener('click', function() {
-      location.reload();
+      pauseModal.classList.remove('visible');
+      if (game) { game.running = false; game = null; }
+      AudioManager.start(); // keep ambient music on menu
+      document.getElementById('game-frame').style.display = 'none';
+      document.getElementById('main-menu').classList.remove('hidden');
     });
   }
 
@@ -386,6 +392,119 @@ function showGameOver(wave, kills) {
     '  <p class="overlay-stat">Enemies slain: ' + kills + '</p>' +
     '  <button class="overlay-btn" onclick="location.reload()">🔄 Try Again</button>' +
     '</div>';
+}
+
+// ============================================================
+//  Settings — localStorage persistence
+// ============================================================
+function loadSettings() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('towerD_settings') || '{}');
+    if (saved.difficulty !== undefined)     GameSettings.difficulty     = saved.difficulty;
+    if (saved.difficultyMult !== undefined) GameSettings.difficultyMult = saved.difficultyMult;
+    if (saved.musicVolume !== undefined)    GameSettings.musicVolume    = saved.musicVolume;
+    if (saved.buildTime !== undefined)      GameSettings.buildTime      = saved.buildTime;
+  } catch (e) {}
+}
+
+function saveSettings() {
+  try {
+    localStorage.setItem('towerD_settings', JSON.stringify({
+      difficulty:     GameSettings.difficulty,
+      difficultyMult: GameSettings.difficultyMult,
+      musicVolume:    GameSettings.musicVolume,
+      buildTime:      GameSettings.buildTime
+    }));
+  } catch (e) {}
+}
+
+// ============================================================
+//  Main Menu
+// ============================================================
+function setupMenuEvents() {
+  // Start
+  document.getElementById('menu-start-btn').addEventListener('click', function() {
+    document.getElementById('main-menu').classList.add('hidden');
+    document.getElementById('game-frame').style.display = '';
+    game = new Game();
+    updateHUD();
+  });
+
+  // Settings
+  document.getElementById('menu-settings-btn').addEventListener('click', function() {
+    syncSettingsUI();
+    document.getElementById('settings-modal').classList.remove('hidden');
+  });
+
+  // Quit
+  document.getElementById('menu-quit-btn').addEventListener('click', function() {
+    window.close();
+    // Fallback message if browser blocks window.close()
+    setTimeout(function() {
+      var btn = document.getElementById('menu-quit-btn');
+      if (btn) {
+        btn.textContent  = 'Close this tab to quit';
+        btn.style.fontSize = '11px';
+      }
+    }, 300);
+  });
+
+  // Settings → Back
+  document.getElementById('settings-back-btn').addEventListener('click', function() {
+    document.getElementById('settings-modal').classList.add('hidden');
+  });
+
+  // Difficulty buttons
+  var diffBtns = document.querySelectorAll('.seg-btn[data-diff]');
+  for (var i = 0; i < diffBtns.length; i++) {
+    diffBtns[i].addEventListener('click', (function(btn) {
+      return function() {
+        var diff = btn.getAttribute('data-diff');
+        GameSettings.difficulty     = diff;
+        GameSettings.difficultyMult = diff === 'easy' ? 0.6 : diff === 'hard' ? 1.6 : 1.0;
+        saveSettings();
+        syncSettingsUI();
+      };
+    })(diffBtns[i]));
+  }
+
+  // Build time buttons
+  var btBtns = document.querySelectorAll('.seg-btn[data-bt]');
+  for (var j = 0; j < btBtns.length; j++) {
+    btBtns[j].addEventListener('click', (function(btn) {
+      return function() {
+        GameSettings.buildTime = parseInt(btn.getAttribute('data-bt'));
+        saveSettings();
+        syncSettingsUI();
+      };
+    })(btBtns[j]));
+  }
+
+  // Volume slider
+  var volSlider = document.getElementById('vol-slider');
+  if (volSlider) {
+    volSlider.addEventListener('input', function() {
+      GameSettings.musicVolume = parseFloat(this.value);
+      AudioManager.setVolume(GameSettings.musicVolume);
+      saveSettings();
+    });
+  }
+}
+
+function syncSettingsUI() {
+  // Difficulty buttons
+  var diffBtns = document.querySelectorAll('.seg-btn[data-diff]');
+  for (var i = 0; i < diffBtns.length; i++) {
+    diffBtns[i].classList.toggle('active', diffBtns[i].getAttribute('data-diff') === GameSettings.difficulty);
+  }
+  // Build time buttons
+  var btBtns = document.querySelectorAll('.seg-btn[data-bt]');
+  for (var j = 0; j < btBtns.length; j++) {
+    btBtns[j].classList.toggle('active', parseInt(btBtns[j].getAttribute('data-bt')) === GameSettings.buildTime);
+  }
+  // Volume slider
+  var volSlider = document.getElementById('vol-slider');
+  if (volSlider) volSlider.value = GameSettings.musicVolume;
 }
 
 // ============================================================

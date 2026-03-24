@@ -3,14 +3,16 @@
 // ============================================================
 
 function Game() {
+  this.running = true;
+
   this.canvas = document.getElementById('game-canvas');
   this.ctx    = this.canvas.getContext('2d');
 
   this.state       = 'build';
   this.waveNumber  = 0;
   this.totalWaves  = 20;
-  this.buildTimer  = 15;
-  this.BUILD_TIME  = 15;
+  this.BUILD_TIME  = GameSettings.buildTime;
+  this.buildTimer  = GameSettings.buildTime;
   this.gameSpeed   = 1;
 
   this.coins     = 100;
@@ -252,7 +254,7 @@ Game.prototype.startWave = function() {
   this.state = 'wave';
 
   var waveDef = WAVE_DEFS[this.waveNumber - 1];
-  var hpMult  = 1 + (this.waveNumber - 1) * 0.08;
+  var hpMult  = (1 + (this.waveNumber - 1) * 0.08) * GameSettings.difficultyMult;
 
   // Build spawn queue with absolute timestamps
   var queue = [];
@@ -281,6 +283,7 @@ Game.prototype.startWave = function() {
 //  Game loop
 // ============================================================
 Game.prototype._loop = function(timestamp) {
+  if (!this.running) return;
   var self = this;
   if (this._lastTime === null) this._lastTime = timestamp;
 

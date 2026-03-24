@@ -53,6 +53,16 @@ var PLACEABLE_SET   = {};
 var CASTLE = { col: 20, row: 9, maxHp: 1000 };
 
 // ============================================================
+//  GameSettings  (loaded from localStorage by ui.js)
+// ============================================================
+var GameSettings = {
+  musicVolume:    0.55,
+  difficulty:     'normal',  // 'easy' | 'normal' | 'hard'
+  difficultyMult: 1.0,       // applied to enemy HP
+  buildTime:      15         // seconds per build phase
+};
+
+// ============================================================
 //  SOLDIER_DEFS
 // ============================================================
 var SOLDIER_DEFS = {

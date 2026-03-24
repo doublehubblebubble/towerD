@@ -10,7 +10,53 @@
 
 <h1>⚔ The King's Road ⚔</h1>
 
-<div id="game-frame">
+<!-- ===== Main Menu ===== -->
+<div id="main-menu">
+  <div class="menu-box">
+    <div class="menu-crown">👑</div>
+    <h2 class="menu-title">Tower D for King</h2>
+    <p class="menu-subtitle">⚔ &nbsp; The King's Road &nbsp; ⚔</p>
+    <div class="menu-buttons">
+      <button class="menu-btn menu-btn-start"    id="menu-start-btn">▶ &nbsp; Start</button>
+      <button class="menu-btn menu-btn-settings" id="menu-settings-btn">⚙ &nbsp; Settings</button>
+      <button class="menu-btn menu-btn-quit"     id="menu-quit-btn">✕ &nbsp; Quit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Settings Modal ===== -->
+<div id="settings-modal" class="hidden">
+  <div class="settings-box">
+    <div class="settings-title">⚙ &nbsp; Settings</div>
+
+    <div class="settings-row">
+      <span class="settings-label">Difficulty</span>
+      <div class="seg-btns">
+        <button class="seg-btn" data-diff="easy">Easy</button>
+        <button class="seg-btn" data-diff="normal">Normal</button>
+        <button class="seg-btn" data-diff="hard">Hard</button>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <span class="settings-label">Music Volume</span>
+      <input type="range" id="vol-slider" min="0" max="1" step="0.05" value="0.55">
+    </div>
+
+    <div class="settings-row">
+      <span class="settings-label">Build Phase Time</span>
+      <div class="seg-btns">
+        <button class="seg-btn" data-bt="10">10s</button>
+        <button class="seg-btn" data-bt="15">15s</button>
+        <button class="seg-btn" data-bt="30">30s</button>
+      </div>
+    </div>
+
+    <button class="menu-btn" id="settings-back-btn">← &nbsp; Back</button>
+  </div>
+</div>
+
+<div id="game-frame" style="display:none">
 
   <!-- ===== Canvas ===== -->
   <canvas id="game-canvas" width="840" height="520"></canvas>
