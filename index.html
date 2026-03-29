@@ -3,23 +3,35 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tower Defense — The King's Road</title>
+  <title>Tower D for King ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>⚔ The King's Road ⚔</h1>
+<h1>✨ Tower D for King ✨</h1>
 
 <!-- ===== Main Menu ===== -->
 <div id="main-menu">
+  <div class="menu-stars">
+    <div class="menu-star s1">✦</div>
+    <div class="menu-star s2">✧</div>
+    <div class="menu-star s3">✦</div>
+    <div class="menu-star s4">✧</div>
+    <div class="menu-star s5">✦</div>
+    <div class="menu-star s6">✧</div>
+    <div class="menu-star s7">✦</div>
+    <div class="menu-star s8">✧</div>
+  </div>
   <div class="menu-box">
     <div class="menu-crown">👑</div>
     <h2 class="menu-title">Tower D for King</h2>
-    <p class="menu-subtitle">⚔ &nbsp; The King's Road &nbsp; ⚔</p>
+    <p class="menu-subtitle">🏰 &nbsp; Defend the Kingdom &nbsp; 🏰</p>
     <div class="menu-buttons">
-      <button class="menu-btn menu-btn-start"    id="menu-start-btn">▶ &nbsp; Start</button>
+      <button class="menu-btn menu-btn-start"    id="menu-start-btn">⚔ &nbsp; Start Adventure</button>
       <button class="menu-btn menu-btn-settings" id="menu-settings-btn">⚙ &nbsp; Settings</button>
-      <button class="menu-btn menu-btn-quit"     id="menu-quit-btn">✕ &nbsp; Quit</button>
+      <button class="menu-btn menu-btn-quit"     id="menu-quit-btn">🌙 &nbsp; Quit</button>
     </div>
   </div>
 </div>
@@ -68,7 +80,7 @@
   <div id="pause-modal">
     <div class="pause-box">
       <div class="pause-title">⏸ PAUSED</div>
-      <div class="pause-sub">THE KING'S ROAD</div>
+      <div class="pause-sub">☕ Take a break, hero!</div>
       <div class="pause-actions">
         <button class="pause-btn-resume" id="resume-btn">▶ Resume</button>
         <button class="pause-btn-exit"   id="exit-btn">✕ Exit Game</button>
@@ -84,7 +96,7 @@
 
       <!-- Wave counter -->
       <div class="hud-block">
-        <span class="hud-label">Wave</span>
+        <span class="hud-label">🌊 Wave</span>
         <span class="hud-value" id="wave-display">— / 20</span>
       </div>
 
@@ -92,7 +104,7 @@
 
       <!-- Wave progress bar -->
       <div class="hud-block">
-        <span class="hud-label">Progress</span>
+        <span class="hud-label">✨ Progress</span>
         <div class="wave-bar-track">
           <div id="wave-bar-fill"></div>
         </div>
@@ -103,7 +115,7 @@
 
       <!-- Castle HP -->
       <div class="hud-block">
-        <span class="hud-label">Castle HP</span>
+        <span class="hud-label">🏰 Castle HP</span>
         <span class="hud-value" id="hp-display">1000 / 1000</span>
         <div class="bar-track" style="width:90px;">
           <div class="bar-fill" id="hp-bar-fill"></div>
@@ -114,7 +126,7 @@
 
       <!-- Coins -->
       <div class="hud-block">
-        <span class="hud-label">Gold</span>
+        <span class="hud-label">💰 Gold</span>
         <span class="hud-value" id="coin-display">100g</span>
       </div>
 
@@ -122,7 +134,7 @@
 
       <!-- Kills -->
       <div class="hud-block">
-        <span class="hud-label">Kills</span>
+        <span class="hud-label">⚔ Kills</span>
         <span class="hud-value" id="kill-display">0</span>
       </div>
 
@@ -143,7 +155,7 @@
     <!-- Bottom row -->
     <div class="hud-bottom">
 
-      <span class="tray-label">Soldiers</span>
+      <span class="tray-label">✦ Heroes</span>
 
       <div class="soldier-tray">
 
